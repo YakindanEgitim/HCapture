@@ -1,0 +1,24 @@
+Here is some design ideas. Feel free to update the list or comment on ideas.
+
+1- Like Goldengate, hcapture can just read system logs and act accordingly. 
+   Drawbacks at first glance [we should analyze in detail] 
+    - What happens if both replication process and hcapture read the same hlog file.
+    - What happens if replication process reads logs before hcapture and move/delete it.
+    - in order to capture all operations, hcapture should be installed on each cluster node. 
+      If this is the case, hcapture processes should be coordinated because we can get same operation from 
+      several cluster nodes. Thus we will need master client architecture, coordination with zookeper etc.. 
+      Seems too complex...
+
+2- We may define our own org.apache.hadoop.hbase.master.cleaner.BaseLogCleanerDelegate implementation 
+    and delete log files iff Hcapture processed them. This idea may solve some problems listed above but 
+    it is dependend to hbase implementation and is an ugly hack..
+
+3- HCapture may act as a "slave cluster" and waits for replication push-updates from master cluster. 
+    Is it possible?
+
+
+
+Some Resource
+- http://hbase.apache.org/replication.html
+- https://ccp.cloudera.com/display/CDH4DOC/HBase+Replication
+- 
